@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "3072281919",
+    "firebase_url": "https://kydspendingapp-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "kydspendingapp",
+    "storage_bucket": "kydspendingapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:3072281919:android:86d3f9f346e71399f8978a",
+        "android_client_info": {
+          "package_name": "com.example.quanlychitieu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "3072281919-gldt5qmnmmc1feopnovlk4ib5caj49t9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.quanlychitieu",
+            "certificate_hash": "29f954f38d3c37b2b74c135df4314868c126ad61"
+          }
+        },
+        {
+          "client_id": "3072281919-1nbgs9pp56r0jta9kmigf1vm3qoe8ju6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2E1wqsHlp58Btt9dZ8EeKEQPPgY1QoBw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "3072281919-1nbgs9pp56r0jta9kmigf1vm3qoe8ju6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
