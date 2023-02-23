@@ -9,6 +9,7 @@ import 'package:quanlychitieu/constant.dart';
 import 'package:quanlychitieu/models/rive_assets.dart';
 import 'package:quanlychitieu/screens/chart.dart';
 import 'package:quanlychitieu/screens/home.dart';
+import 'package:quanlychitieu/screens/notifilocation.dart';
 import 'package:quanlychitieu/screens/profile_user.dart';
 import 'package:rive/rive.dart';
 import '../models/categorys.dart';
@@ -307,9 +308,9 @@ class _SideMenuState extends State<SideMenu> {
                       });
                       if (selectMenu == sideMenus[0]) {
                         // Navigator.popUntil();
-                        Get.to(() => const Home(),
-                            transition: Transition.rightToLeftWithFade,
-                            duration: const Duration(milliseconds: 500));
+                        // Get.to(() => const Home(),
+                        //     transition: Transition.rightToLeftWithFade,
+                        //     duration: const Duration(milliseconds: 500));
                       } else if (selectMenu == sideMenus[1]) {
                         // Navigator.of(context).push(MaterialPageRoute(
                         //   builder: (context) => const PieChart(),
@@ -319,6 +320,10 @@ class _SideMenuState extends State<SideMenu> {
                                   spending: spending,
                                   income: income,
                                 ),
+                            transition: Transition.rightToLeftWithFade,
+                            duration: const Duration(milliseconds: 500));
+                      } else if (selectMenu == sideMenus[3]) {
+                        Get.to(() => NotifiCationskdy(),
                             transition: Transition.rightToLeftWithFade,
                             duration: const Duration(milliseconds: 500));
                       } else if (selectMenu == sideMenus[5]) {
