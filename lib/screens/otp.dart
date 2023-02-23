@@ -100,6 +100,7 @@ class _OtpPhoneState extends State<OtpPhone> {
                           'userName':
                               "Người dùng mới",
                           'totalMoney': 0,
+                          'time': DateTime(2023, 1, 1, 20).toString(),
                           'accountBanks': {'1': 'Ví', '2': 0.0}
                         };
                         _db

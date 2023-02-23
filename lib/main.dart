@@ -5,8 +5,12 @@ import 'package:get/get.dart';
 import 'package:quanlychitieu/screens/home.dart';
 import 'package:quanlychitieu/screens/phone_number.dart';
 import 'package:quanlychitieu/screens/otp.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest_10y.dart';
 
 Future<void> main(List<String> args) async {
+  tz.initializeTimeZones();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
