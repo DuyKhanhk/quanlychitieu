@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:quanlychitieu/components/update_widget.dart';
 import 'package:quanlychitieu/constant.dart';
@@ -20,10 +21,12 @@ class ItemCategory extends StatefulWidget {
       {super.key,
       required this.currentScreen,
       required this.expense,
-      required this.snapshot});
+      required this.snapshot,
+      required this.status});
   final DataSnapshot snapshot;
   final Expense expense;
   final int currentScreen;
+  final bool status;
 
   @override
   State<ItemCategory> createState() => _ItemCategoryState();
@@ -34,6 +37,7 @@ class _ItemCategoryState extends State<ItemCategory> {
   final auth = FirebaseAuth.instance;
   late StreamSubscription getTotalMoney;
   TextEditingController txtTotalMoney = TextEditingController();
+  TextEditingController txtSalary = TextEditingController();
 
   @override
   void initState() {
@@ -50,6 +54,7 @@ class _ItemCategoryState extends State<ItemCategory> {
       if (mounted) {
         setState(() {
           txtTotalMoney.text = data[2].toString();
+          txtSalary.text = data[9].toString();
         });
       }
     });
@@ -57,7 +62,8 @@ class _ItemCategoryState extends State<ItemCategory> {
 
   void _removeItemCategory() {
     if (widget.currentScreen == 0) {
-      final index = int.parse(widget.expense.money) +
+      if (widget.status) {
+          final index = int.parse(widget.expense.money) +
           int.parse(txtTotalMoney.text.toString());
       final update = <String, dynamic>{'1': 'Ví', '2': index};
       db
@@ -67,17 +73,41 @@ class _ItemCategoryState extends State<ItemCategory> {
           .catchError((error) => print('You got an error $error'));
 
       db.child('spendings/${widget.snapshot.key}').remove();
+      } else {
+        Get.snackbar('Cảnh báo', 'Phiếu chi trong kế hoạch không thể xóa');
+      }
     } else {
-      final index = int.parse(txtTotalMoney.text.toString()) -
-          int.parse(widget.expense.money);
-      final update = <String, dynamic>{'1': 'Ví', '2': index};
-      db
-          .child('users/${auth.currentUser!.uid}/accountBanks')
-          .update(update)
-          .then((_) => print('newSpending has been written!'))
-          .catchError((error) => print('You got an error $error'));
+      if (widget.expense.type == listImcome[0] && widget.status) {
+        // final index = int.parse(txtSalary.text.toString()) -
+        //     int.parse(widget.expense.money);
+        // final update = <String, dynamic>{
+        //   '3': index * 0.55,
+        //   '4': index * 0.1,
+        //   '5': index * 0.1,
+        //   '6': index * 0.1,
+        //   '7': index * 0.1,
+        //   '8': index * 0.05,
+        //   '9': index,
+        // };
+        // db
+        //     .child('users/${auth.currentUser!.uid}/accountBanks')
+        //     .update(update)
+        //     .then((_) => print('newIncome has been written!'))
+        //     .catchError((error) => print('You got an error $error'));
+        // db.child('incomes/${widget.snapshot.key}').remove();
+        Get.snackbar('Cảnh báo', 'Phiếu nhập trong kế hoạch không thể xóa');
+      } else {
+        final index = int.parse(txtTotalMoney.text.toString()) -
+            int.parse(widget.expense.money);
+        final update = <String, dynamic>{'1': 'Ví', '2': index};
+        db
+            .child('users/${auth.currentUser!.uid}/accountBanks')
+            .update(update)
+            .then((_) => print('newSpending has been written!'))
+            .catchError((error) => print('You got an error $error'));
 
-      db.child('spendings/${widget.snapshot.key}').remove();
+        db.child('incomes/${widget.snapshot.key}').remove();
+      }
     }
   }
 
@@ -187,6 +217,7 @@ class _ItemCategoryState extends State<ItemCategory> {
                         : Container(),
                   ),
                   expanded: UpdateWidget(
+                    status: widget.status,
                     keyItemCategory: widget.snapshot.key.toString(),
                     expense: widget.expense,
                     currentScreen: widget.currentScreen,

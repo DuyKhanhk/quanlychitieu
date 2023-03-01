@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quanlychitieu/constant.dart';
 import 'package:quanlychitieu/screens/otp.dart';
+import 'package:widget_and_text_animator/widget_and_text_animator.dart';
 
 class PhoneNumber extends StatefulWidget {
   const PhoneNumber({super.key});
@@ -33,13 +34,44 @@ class _PhoneNumberState extends State<PhoneNumber> {
         child: Container(
           margin:
               EdgeInsets.only(left: screenWidth / 20, right: screenWidth / 20),
-          alignment: Alignment.center,
           child: SingleChildScrollView(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const Text('Xác minh số điện thoại'),
-                const Text('Hãy nhập số điện thoại của bạn ngay'),
+                Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    Image(
+                      image: const AssetImage('assets/images/moneydrop.gif'),
+                      width: screenWidth,
+                    ),
+                    WidgetAnimator(
+                      incomingEffect:
+                          WidgetTransitionEffects.incomingSlideInFromTop(),
+                      child: Image(
+                        image: const AssetImage('assets/images/ninLogo.png'),
+                        width: screenWidth / 2.2,
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: screenWidth / 20,
+                ),
+                const Text(
+                  'Xác minh số điện thoại',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black45),
+                ),
+                const Text(
+                  'Hãy nhập số điện thoại của bạn ngay',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black45),
+                ),
                 SizedBox(
                   height: screenWidth / 20,
                 ),

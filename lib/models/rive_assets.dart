@@ -26,11 +26,11 @@ List<RiveAsset> sideMenus = [
       artboard: 'LIKE/STAR',
       src: 'assets/icons/home.riv',
       title: 'Biểu đồ'),
-  RiveAsset(
-      stateMachineName: 'SEARCH_Interactivity',
-      artboard: 'SEARCH',
-      src: 'assets/icons/home.riv',
-      title: 'Tìm kiếm'),
+  // RiveAsset(
+  //     stateMachineName: 'SEARCH_Interactivity',
+  //     artboard: 'SEARCH',
+  //     src: 'assets/icons/home.riv',
+  //     title: 'Tìm kiếm'),
   RiveAsset(
       stateMachineName: 'BELL_Interactivity',
       artboard: 'BELL',
@@ -40,7 +40,7 @@ List<RiveAsset> sideMenus = [
       stateMachineName: 'CHAT_Interactivity',
       artboard: 'CHAT',
       src: 'assets/icons/home.riv',
-      title: 'Trợ giúp'),
+      title: 'Kế hoạch'),
   RiveAsset(
       stateMachineName: 'RELOAD_Interactivity',
       artboard: 'REFRESH/RELOAD',

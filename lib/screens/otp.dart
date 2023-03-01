@@ -69,8 +69,20 @@ class _OtpPhoneState extends State<OtpPhone> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Xác minh số điện thoại'),
-                const Text('Hãy nhập số điện thoại của bạn ngay'),
+                const Text(
+                  'Xác minh số điện thoại',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black45),
+                ),
+                const Text(
+                  'Hãy nhập số điện thoại của bạn ngay',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black45),
+                ),
                 SizedBox(
                   height: screenWidth / 20,
                 ),
@@ -96,12 +108,22 @@ class _OtpPhoneState extends State<OtpPhone> {
                         final nextMember = <String, dynamic>{
                           'userID': auth.currentUser!.uid,
                           'phone': auth.currentUser!.phoneNumber,
-                          'image':1,
-                          'userName':
-                              "Người dùng mới",
+                          'image': 1,
+                          'userName': "Người dùng mới",
                           'totalMoney': 0,
                           'time': DateTime(2023, 1, 1, 20).toString(),
-                          'accountBanks': {'1': 'Ví', '2': 0.0}
+                          'accountBanks': {
+                            '1': 'Ví',
+                            '2': 0.0,
+                            '3': 0.0,
+                            '4': 0.0,
+                            '5': 0.0,
+                            '6': 0.0,
+                            '7': 0.0,
+                            '8': 0.0,
+                            '9': 0,
+                            '10': ''
+                          }
                         };
                         _db
                             .child('users/${auth.currentUser!.uid}')

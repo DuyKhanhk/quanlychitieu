@@ -1,5 +1,4 @@
 // ignore_for_file: must_be_immutable, unused_field, avoid_function_literals_in_foreach_calls
-
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -28,12 +27,15 @@ class _InComeState extends State<InCome> {
   final db = FirebaseDatabase.instance.ref();
   final auth = FirebaseAuth.instance;
   late StreamSubscription _totalCategory;
+  String _listChosseTime = listChosseTime[1];
   List<String> listCategory = [];
+  Set<String> listCategorypiechart = {};
   List<DataItem> dataset = [DataItem(0, '', Colors.grey.withOpacity(0.8))];
   CategoryIncome categoryIncome = CategoryIncome(0, 0, 0, 0, 0, 0, 0, 0);
-  double totalAll = 0.8;
+  double totalAll = 0.0;
   dynamic total = 0;
   int indexColor = -1;
+  int count = 0;
 
   @override
   void initState() {
@@ -53,34 +55,44 @@ class _InComeState extends State<InCome> {
       if (mounted) {
         setState(() {
           categoryIncome = CategoryIncome(0, 0, 0, 0, 0, 0, 0, 0);
-          // listCategory.clear();
           dataset.clear();
           totalAll = 0;
           for (var itemC in data) {
-            if (itemC.child('type').value.toString() == listImcome[0]) {
-              categoryIncome.luong +=
-                  int.parse(itemC.child('money').value.toString());
-            } else if (itemC.child('type').value.toString() == listImcome[1]) {
-              categoryIncome.thuongLuong +=
-                  int.parse(itemC.child('money').value.toString());
-            } else if (itemC.child('type').value.toString() == listImcome[2]) {
-              categoryIncome.kinhDoanh +=
-                  int.parse(itemC.child('money').value.toString());
-            } else if (itemC.child('type').value.toString() == listImcome[3]) {
-              categoryIncome.dauTu +=
-                  int.parse(itemC.child('money').value.toString());
-            } else if (itemC.child('type').value.toString() == listImcome[4]) {
-              categoryIncome.choThue +=
-                  int.parse(itemC.child('money').value.toString());
-            } else if (itemC.child('type').value.toString() == listImcome[5]) {
-              categoryIncome.donate +=
-                  int.parse(itemC.child('money').value.toString());
-            } else if (itemC.child('type').value.toString() == listImcome[6]) {
-              categoryIncome.thuNhapThuDong +=
-                  int.parse(itemC.child('money').value.toString());
-            } else if (itemC.child('type').value.toString() == listImcome[7]) {
-              categoryIncome.khac +=
-                  int.parse(itemC.child('money').value.toString());
+            if (_getChosseTime(
+                DateTime.parse(itemC.child('timeChosse').value.toString()),
+                _listChosseTime)) {
+              if (itemC.child('type').value.toString() == listImcome[0]) {
+                categoryIncome.luong +=
+                    int.parse(itemC.child('money').value.toString());
+              } else if (itemC.child('type').value.toString() ==
+                  listImcome[1]) {
+                categoryIncome.thuongLuong +=
+                    int.parse(itemC.child('money').value.toString());
+              } else if (itemC.child('type').value.toString() ==
+                  listImcome[2]) {
+                categoryIncome.kinhDoanh +=
+                    int.parse(itemC.child('money').value.toString());
+              } else if (itemC.child('type').value.toString() ==
+                  listImcome[3]) {
+                categoryIncome.dauTu +=
+                    int.parse(itemC.child('money').value.toString());
+              } else if (itemC.child('type').value.toString() ==
+                  listImcome[4]) {
+                categoryIncome.choThue +=
+                    int.parse(itemC.child('money').value.toString());
+              } else if (itemC.child('type').value.toString() ==
+                  listImcome[5]) {
+                categoryIncome.donate +=
+                    int.parse(itemC.child('money').value.toString());
+              } else if (itemC.child('type').value.toString() ==
+                  listImcome[6]) {
+                categoryIncome.thuNhapThuDong +=
+                    int.parse(itemC.child('money').value.toString());
+              } else if (itemC.child('type').value.toString() ==
+                  listImcome[7]) {
+                categoryIncome.khac +=
+                    int.parse(itemC.child('money').value.toString());
+              }
             }
           }
           totalAll += categoryIncome.luong +
@@ -167,6 +179,43 @@ class _InComeState extends State<InCome> {
     });
   }
 
+  bool _getChosseTime(DateTime timeFirebase, String itemlistCt) {
+    var dateTimenow = DateTime.now();
+    switch (itemlistCt) {
+      case 'Ngày':
+        {
+          if (timeFirebase.toString().split(' ')[0] ==
+              dateTimenow.toString().split(' ')[0]) {
+            return true;
+          }
+        }
+        break;
+      case 'Tuần':
+        {
+          int weeksFB = _weekNumber(timeFirebase);
+          int weeksystem = _weekNumber(DateTime.now());
+          if (weeksFB == weeksystem&&timeFirebase.year == DateTime.now().year) return true;
+        }
+        break;
+      case 'Tháng':
+        {
+          if (timeFirebase.month == DateTime.now().month&&timeFirebase.year == DateTime.now().year) return true;
+        }
+        break;
+      case 'Năm':
+        {
+          if (timeFirebase.year == DateTime.now().year) return true;
+        }
+        break;
+    }
+    return false;
+  }
+
+  int _weekNumber(DateTime date) {
+    int dayOfYear = int.parse(DateFormat("D").format(date));
+    return ((dayOfYear - date.weekday + 10) / 7).floor();
+  }
+
   List<DataItem> kdy = [DataItem(1.0, '', kdy1)];
 
   @override
@@ -182,13 +231,51 @@ class _InComeState extends State<InCome> {
               urlLottie: 'assets/images/coinMoney.json',
             )),
         PieChartCustom(
-          listCategory: listCategory,
+          listCategory: listCategorypiechart,
           totalAll: totalAll,
           currentScreens: widget.currentScreen,
           dataset: dataset,
         ),
         Padding(
-          padding: EdgeInsets.only(top: screensIndex.height / 2.2),
+          padding: EdgeInsets.fromLTRB(
+              screensIndex.width / 3,
+              screensIndex.width / 2.5 + screensIndex.width / 1.7,
+              screensIndex.width / 3,
+              screensIndex.width / 1.37),
+          child: DropdownButtonFormField(
+            value: _listChosseTime,
+            items: listChosseTime.map((e) {
+              return DropdownMenuItem(
+                // ignore: sort_child_properties_last
+                child: Text(
+                  e,
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15,
+                      color: Colors.black.withOpacity(0.6)),
+                ),
+                value: e,
+              );
+            }).toList(),
+            onChanged: ((value) {
+              setState(() {
+                _listChosseTime = value as String;
+                _getTotalCategory();
+              });
+            }),
+            icon: Icon(
+              Icons.arrow_drop_down_circle,
+              color: Colors.indigo[400],
+            ),
+            decoration: InputDecoration(
+                labelText: 'Chọn thời gian',
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15))),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(
+              top: screensIndex.width / 2.5 + screensIndex.width / 1.35),
           child: SizedBox(
               width: screensIndex.width * 7 / 8,
               child: FirebaseAnimatedList(
@@ -196,8 +283,12 @@ class _InComeState extends State<InCome> {
                       .child('incomes')
                       .orderByChild('uID')
                       .equalTo(auth.currentUser!.uid),
+                  sort: (a, b) => b
+                      .child('type')
+                      .value
+                      .toString()
+                      .compareTo(a.child('type').value.toString()),
                   itemBuilder: (context, snapshot, animation, index) {
-                    int count = 0;
                     listCategory.forEach((element) {
                       if (listCategory
                           .contains(snapshot.child('type').value.toString())) {
@@ -207,15 +298,34 @@ class _InComeState extends State<InCome> {
                       }
                     });
 
-                    listCategory.add(snapshot.child('type').value.toString());
-                    return count == 0
+                    count == 0 ? listCategory.clear() : null;
+                    _getChosseTime(
+                            DateTime.parse(
+                                snapshot.child('timeChosse').value.toString()),
+                            _listChosseTime)
+                        ? {
+                            listCategory
+                                .add(snapshot.child('type').value.toString()),
+                            listCategorypiechart
+                                .add(snapshot.child('type').value.toString())
+                          }
+                        : listCategorypiechart.contains(
+                                snapshot.child('type').value.toString())
+                            ? listCategorypiechart
+                                .remove(snapshot.child('type').value.toString())
+                            : null;
+
+                    return count == 0 &&
+                            _getChosseTime(
+                                DateTime.parse(snapshot
+                                    .child('timeChosse')
+                                    .value
+                                    .toString()),
+                                _listChosseTime)
                         ? InkWell(
                             onTap: () {
-                              setState(() {
-                                count = 0;
-                                _getTotalCategory();
-                              });
                               Get.to(ShowListCategory(
+                                  timeChosse: _listChosseTime,
                                   currentScreens: widget.currentScreen,
                                   type:
                                       snapshot.child('type').value.toString()));
