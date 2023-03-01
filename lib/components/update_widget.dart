@@ -1,7 +1,5 @@
 // ignore_for_file: avoid_print
-
 import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:quanlychitieu/constant.dart';
 import 'package:quanlychitieu/models/model.dart';
-
 import '../screens/calculator.dart';
 import 'notify_showdialog.dart';
 
@@ -19,10 +16,12 @@ class UpdateWidget extends StatefulWidget {
       {super.key,
       required this.currentScreen,
       required this.expense,
-      required this.keyItemCategory});
+      required this.keyItemCategory,
+      required this.status});
   final int currentScreen;
   final Expense expense;
   final String keyItemCategory;
+  final bool status;
   @override
   State<UpdateWidget> createState() => _UpdateWidgetState();
 }
@@ -70,7 +69,10 @@ class _UpdateWidgetState extends State<UpdateWidget> {
     switch (widget.currentScreen) {
       case 0:
         {
-          if (txtSpending.text != '') {
+          if (txtSpending.text != '' &&
+              !txtSpending.text.contains('.') &&
+              !txtSpending.text.contains('-') &&
+              !txtSpending.text.contains(' ')) {
             final newSpending = <String, dynamic>{
               'uID': auth.currentUser!.uid,
               'money': int.parse(txtSpending.text.toString()),
@@ -116,7 +118,10 @@ class _UpdateWidgetState extends State<UpdateWidget> {
         break;
       case 1:
         {
-          if (txtIncome.text != '') {
+          if (txtIncome.text != '' &&
+              !txtIncome.text.contains('.') &&
+              !txtIncome.text.contains('-') &&
+              !txtIncome.text.contains(' ')) {
             final newIncome = <String, dynamic>{
               'uID': auth.currentUser!.uid,
               'money': int.parse(txtIncome.text.toString()),
@@ -341,7 +346,14 @@ class _UpdateWidgetState extends State<UpdateWidget> {
                 ),
                 Center(
                   child: InkWell(
-                    onTap: () => _insertData(),
+                    onTap: () {
+                      widget.expense.type == listImcome[0] || !widget.status
+                          ? Get.snackbar(
+                              "Cảnh báo",
+                              'Phiếu đã được đặt theo kế hoạch! không thể lưu',
+                            )
+                          : _insertData();
+                    },
                     child: Container(
                       width: screensIndex.width / 3.5,
                       margin: const EdgeInsets.only(top: 15),

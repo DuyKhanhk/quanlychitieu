@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_function_literals_in_foreach_calls, must_be_immutable, unused_field
+// ignore_for_file: avoid_function_literals_in_foreach_calls, must_be_immutable, unused_field, avoid_print
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -31,12 +31,15 @@ class _SpendingState extends State<Spending> {
   final List<DataItem> dataset = [
     DataItem(0, '', Colors.grey.withOpacity(0.8))
   ];
+  String _listChosseTime = listChosseTime[1];
   CategorySpending categorySpending =
       CategorySpending(0, 0, 0, 0, 0, 0, 0, 0, 0);
   List<String> listCategory = [];
+  Set<String> listCategorypiechart = {};
   double totalAll = 0.0;
   dynamic total = 0;
   int indexColor = -1;
+  int count = 0;
 
   @override
   void initState() {
@@ -54,46 +57,51 @@ class _SpendingState extends State<Spending> {
       final data = event.snapshot.children;
       if (mounted) {
         setState(() {
-          listCategory.clear();
           dataset.clear();
+
           categorySpending = CategorySpending(0, 0, 0, 0, 0, 0, 0, 0, 0);
           totalAll = 0;
+          count = 0;
           for (var itemC in data) {
-            if (itemC.child('type').value.toString() == listSpending[0]) {
-              categorySpending.thueNha +=
-                  int.parse(itemC.child('money').value.toString());
-            } else if (itemC.child('type').value.toString() ==
-                listSpending[1]) {
-              categorySpending.hocTap +=
-                  int.parse(itemC.child('money').value.toString());
-            } else if (itemC.child('type').value.toString() ==
-                listSpending[2]) {
-              categorySpending.diLai +=
-                  int.parse(itemC.child('money').value.toString());
-            } else if (itemC.child('type').value.toString() ==
-                listSpending[3]) {
-              categorySpending.anUong +=
-                  int.parse(itemC.child('money').value.toString());
-            } else if (itemC.child('type').value.toString() ==
-                listSpending[4]) {
-              categorySpending.giaiTri +=
-                  int.parse(itemC.child('money').value.toString());
-            } else if (itemC.child('type').value.toString() ==
-                listSpending[5]) {
-              categorySpending.dienNuoc +=
-                  int.parse(itemC.child('money').value.toString());
-            } else if (itemC.child('type').value.toString() ==
-                listSpending[6]) {
-              categorySpending.mangWifi +=
-                  int.parse(itemC.child('money').value.toString());
-            } else if (itemC.child('type').value.toString() ==
-                listSpending[7]) {
-              categorySpending.muaSam +=
-                  int.parse(itemC.child('money').value.toString());
-            } else if (itemC.child('type').value.toString() ==
-                listSpending[8]) {
-              categorySpending.khac +=
-                  int.parse(itemC.child('money').value.toString());
+            if (_getChosseTime(
+                DateTime.parse(itemC.child('timeChosse').value.toString()),
+                _listChosseTime)) {
+              if (itemC.child('type').value.toString() == listSpending[0]) {
+                categorySpending.thueNha +=
+                    int.parse(itemC.child('money').value.toString());
+              } else if (itemC.child('type').value.toString() ==
+                  listSpending[1]) {
+                categorySpending.hocTap +=
+                    int.parse(itemC.child('money').value.toString());
+              } else if (itemC.child('type').value.toString() ==
+                  listSpending[2]) {
+                categorySpending.diLai +=
+                    int.parse(itemC.child('money').value.toString());
+              } else if (itemC.child('type').value.toString() ==
+                  listSpending[3]) {
+                categorySpending.anUong +=
+                    int.parse(itemC.child('money').value.toString());
+              } else if (itemC.child('type').value.toString() ==
+                  listSpending[4]) {
+                categorySpending.giaiTri +=
+                    int.parse(itemC.child('money').value.toString());
+              } else if (itemC.child('type').value.toString() ==
+                  listSpending[5]) {
+                categorySpending.dienNuoc +=
+                    int.parse(itemC.child('money').value.toString());
+              } else if (itemC.child('type').value.toString() ==
+                  listSpending[6]) {
+                categorySpending.mangWifi +=
+                    int.parse(itemC.child('money').value.toString());
+              } else if (itemC.child('type').value.toString() ==
+                  listSpending[7]) {
+                categorySpending.muaSam +=
+                    int.parse(itemC.child('money').value.toString());
+              } else if (itemC.child('type').value.toString() ==
+                  listSpending[8]) {
+                categorySpending.khac +=
+                    int.parse(itemC.child('money').value.toString());
+              }
             }
           }
           totalAll += categorySpending.thueNha +
@@ -193,6 +201,47 @@ class _SpendingState extends State<Spending> {
     });
   }
 
+  bool _getChosseTime(DateTime timeFirebase, String itemlistCt) {
+    var dateTimenow = DateTime.now();
+    switch (itemlistCt) {
+      case 'Ngày':
+        {
+          if (timeFirebase.toString().split(' ')[0] ==
+              dateTimenow.toString().split(' ')[0]) {
+            return true;
+          }
+        }
+        break;
+      case 'Tuần':
+        {
+          int weeksFB = _weekNumber(timeFirebase);
+          int weeksystem = _weekNumber(DateTime.now());
+          if (weeksFB == weeksystem &&
+              timeFirebase.year == DateTime.now().year) {
+            return true;
+          }
+        }
+        break;
+      case 'Tháng':
+        {
+          if (timeFirebase.month == DateTime.now().month &&
+              timeFirebase.year == DateTime.now().year) return true;
+        }
+        break;
+      case 'Năm':
+        {
+          if (timeFirebase.year == DateTime.now().year) return true;
+        }
+        break;
+    }
+    return false;
+  }
+
+  int _weekNumber(DateTime date) {
+    int dayOfYear = int.parse(DateFormat("D").format(date));
+    return ((dayOfYear - date.weekday + 10) / 7).floor();
+  }
+
   List<DataItem> kdy = [DataItem(0.0, '', kdy1)];
 
   @override
@@ -208,14 +257,51 @@ class _SpendingState extends State<Spending> {
               urlLottie: 'assets/images/blueCard.json',
             )),
         PieChartCustom(
-          listCategory: listCategory,
+          listCategory: listCategorypiechart,
           totalAll: totalAll,
           currentScreens: widget.currentScreen,
           dataset: dataset.isEmpty ? kdy : dataset,
         ),
         Padding(
+          padding: EdgeInsets.fromLTRB(
+              screensIndex.width / 3,
+              screensIndex.width / 2.5 + screensIndex.width / 1.7,
+              screensIndex.width / 3,
+              screensIndex.width / 1.37),
+          child: DropdownButtonFormField(
+            value: _listChosseTime,
+            items: listChosseTime.map((e) {
+              return DropdownMenuItem(
+                // ignore: sort_child_properties_last
+                child: Text(
+                  e,
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15,
+                      color: Colors.black.withOpacity(0.6)),
+                ),
+                value: e,
+              );
+            }).toList(),
+            onChanged: ((value) {
+              setState(() {
+                _listChosseTime = value as String;
+                _getTotalCategory();
+              });
+            }),
+            icon: Icon(
+              Icons.arrow_drop_down_circle,
+              color: Colors.indigo[400],
+            ),
+            decoration: InputDecoration(
+                labelText: 'Chọn thời gian',
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15))),
+          ),
+        ),
+        Padding(
           padding: EdgeInsets.only(
-              top: screensIndex.width / 2.5 + screensIndex.width / 1.7),
+              top: screensIndex.width / 2.5 + screensIndex.width / 1.35),
           child: SizedBox(
               width: screensIndex.width * 7 / 8,
               child: FirebaseAnimatedList(
@@ -223,29 +309,51 @@ class _SpendingState extends State<Spending> {
                       .child('spendings')
                       .orderByChild('uID')
                       .equalTo(auth.currentUser!.uid),
+                  sort: (a, b) => b
+                      .child('type')
+                      .value
+                      .toString()
+                      .compareTo(a.child('type').value.toString()),
                   itemBuilder: (context, snapshot, animation, index) {
-                    int count = 0;
                     listCategory.forEach((element) {
                       if (listCategory
                           .contains(snapshot.child('type').value.toString())) {
                         count++;
                       } else {
                         count = 0;
+                        // listCategory.clear();
                       }
                     });
+                    count == 0 ? listCategory.clear() : null;
+                    _getChosseTime(
+                            DateTime.parse(
+                                snapshot.child('timeChosse').value.toString()),
+                            _listChosseTime)
+                        ? {
+                            listCategory
+                                .add(snapshot.child('type').value.toString()),
+                            listCategorypiechart
+                                .add(snapshot.child('type').value.toString())
+                          }
+                        : listCategorypiechart.contains(
+                                snapshot.child('type').value.toString())
+                            ? listCategorypiechart
+                                .remove(snapshot.child('type').value.toString())
+                            : null;
 
-                    listCategory.add(snapshot.child('type').value.toString());
-                    return count == 0
+                    return count == 0 &&
+                            _getChosseTime(
+                                DateTime.parse(snapshot
+                                    .child('timeChosse')
+                                    .value
+                                    .toString()),
+                                _listChosseTime)
                         ? InkWell(
                             onTap: () {
-                              setState(() {
-                                // listCategory.clear();
-                                count = 0;
-                                _getTotalCategory();
-                              });
                               Get.to(
                                   ShowListCategory(
                                       currentScreens: widget.currentScreen,
+                                      timeChosse: _listChosseTime,
                                       type: snapshot
                                           .child('type')
                                           .value
@@ -334,7 +442,9 @@ class _SpendingState extends State<Spending> {
                                   ],
                                 )),
                           )
-                        : Container();
+                        : Container(
+                            // child: Text('data'),
+                            );
                   })),
         )
       ]),

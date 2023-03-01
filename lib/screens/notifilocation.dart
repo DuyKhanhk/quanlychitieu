@@ -86,30 +86,37 @@ class _NotifiCationskdyState extends State<NotifiCationskdy> {
                   color: Colors.grey[300]),
               child: CupertinoPageScaffold(
                 backgroundColor: Colors.grey[300],
-                child: CupertinoButton(
-                  child: Text(
-                    '${dateTime.hour < 10 ? '0${dateTime.hour}' : dateTime.hour}:${dateTime.minute < 10 ? '0${dateTime.minute}' : dateTime.minute}',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600, color: Colors.indigo[400]),
-                  ),
-                  onPressed: () {
-                    showCupertinoModalPopup(
-                        context: context,
-                        builder: (BuildContext context) => SizedBox(
-                              height: screensIndex.width * 0.8,
-                              child: CupertinoDatePicker(
-                                backgroundColor: Colors.indigo[400],
-                                initialDateTime: dateTime,
-                                onDateTimeChanged: (DateTime newTime) {
-                                  setState(() {
-                                    dateTime = newTime;
-                                  });
-                                },
-                                use24hFormat: true,
-                                mode: CupertinoDatePickerMode.time,
-                              ),
-                            ));
-                  },
+                child: Column(
+                  children: [
+                    CupertinoButton(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Text(
+                        '${dateTime.hour < 10 ? '0${dateTime.hour}' : dateTime.hour}:${dateTime.minute < 10 ? '0${dateTime.minute}' : dateTime.minute}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.indigo[400]),
+                      ),
+                      onPressed: () {
+                        showCupertinoModalPopup(
+                            context: context,
+                            builder: (BuildContext context) => SizedBox(
+                                  height: screensIndex.width * 0.8,
+                                  child: CupertinoDatePicker(
+                                    backgroundColor: Colors.white,
+                                    initialDateTime: dateTime,
+                                    onDateTimeChanged: (DateTime newTime) {
+                                      setState(() {
+                                        dateTime = newTime;
+                                      });
+                                    },
+                                    maximumYear: DateTime.now().year,
+                                    use24hFormat: true,
+                                    mode: CupertinoDatePickerMode.time,
+                                  ),
+                                ));
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),

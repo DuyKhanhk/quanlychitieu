@@ -30,11 +30,23 @@ final listImcome = [
   'Khác'
 ];
 
+final listChosseTime = ['Ngày', 'Tuần', 'Tháng', 'Năm'];
+
+final listSalaryPlan = [
+  'Sinh hoạt',
+  'Học tập',
+  'Tiết kiệm',
+  'Đầu tư',
+  'Hưởng thụ',
+  'Từ thiện',
+  'Ví',
+];
+
 List<Color> listColorSp = [
   const Color.fromARGB(255, 255, 98, 171),
   const Color.fromARGB(255, 255, 111, 106),
   const Color.fromARGB(255, 248, 197, 119),
-  const Color.fromARGB(255, 145, 221, 200),
+  const Color.fromARGB(255, 87, 160, 228),
   const Color.fromARGB(255, 113, 109, 242),
   const Color.fromARGB(255, 4, 217, 196),
   const Color.fromARGB(255, 230, 194, 240),

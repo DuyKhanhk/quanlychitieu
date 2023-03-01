@@ -21,7 +21,7 @@ class PieChartCustom extends StatefulWidget {
   });
   final double totalAll;
   final int currentScreens;
-  final List<String> listCategory;
+  final Set<String> listCategory;
   final List<DataItem> dataset;
 
   static const pal = [
@@ -139,12 +139,10 @@ class _PieChartCustomState extends State<PieChartCustom> {
                                 padding: EdgeInsets.only(
                                     top: screensIndex.width / 20),
                                 child: ListView.builder(
-                                    itemCount:
-                                        widget.listCategory.toSet().length,
+                                    itemCount: widget.listCategory.length,
                                     itemBuilder: (context, index) {
                                       return ItemCatergory(
                                         category: widget.listCategory
-                                            .toSet()
                                             .elementAt(index),
                                         index: index,
                                         currentScreen: widget.currentScreens,

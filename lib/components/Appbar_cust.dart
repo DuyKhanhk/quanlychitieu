@@ -39,7 +39,7 @@ class AppbarCustom extends StatelessWidget {
                 final data = (snapshot.data as DatabaseEvent)
                     .snapshot
                     .child('accountBanks')
-                    .value as List<dynamic?>;
+                    .value as List<dynamic>;
                 final index = int.parse(data[2].toString());
                 return Column(
                   children: [

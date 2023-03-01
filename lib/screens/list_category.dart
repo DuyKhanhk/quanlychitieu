@@ -14,11 +14,57 @@ final formatCurrency = NumberFormat("#,##0", "en_US");
 
 class ShowListCategory extends StatelessWidget {
   ShowListCategory(
-      {super.key, required this.type, required this.currentScreens});
+      {super.key,
+      required this.type,
+      required this.currentScreens,
+      required this.timeChosse});
   final int currentScreens;
   final String type;
+  final String timeChosse;
   final db = FirebaseDatabase.instance.ref();
   final auth = FirebaseAuth.instance;
+
+  bool _getChosseTime(DateTime timeFirebase, String itemlistCt) {
+    var dateTimenow = DateTime.now();
+    switch (itemlistCt) {
+      case 'Ngày':
+        {
+          if (timeFirebase.toString().split(' ')[0] ==
+              dateTimenow.toString().split(' ')[0]) {
+            return true;
+          }
+        }
+        break;
+      case 'Tuần':
+        {
+          int weeksFB = _weekNumber(timeFirebase);
+          int weeksystem = _weekNumber(DateTime.now());
+          if (weeksFB == weeksystem &&
+              timeFirebase.year == DateTime.now().year) {
+            return true;
+          }
+        }
+        break;
+      case 'Tháng':
+        {
+          if (timeFirebase.month == DateTime.now().month &&
+              timeFirebase.year == DateTime.now().year) return true;
+        }
+        break;
+      case 'Năm':
+        {
+          if (timeFirebase.year == DateTime.now().year) return true;
+        }
+        break;
+    }
+    return false;
+  }
+
+  int _weekNumber(DateTime date) {
+    int dayOfYear = int.parse(DateFormat("D").format(date));
+    return ((dayOfYear - date.weekday + 10) / 7).floor();
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWith = MediaQuery.of(context).size.width;
@@ -41,18 +87,42 @@ class ShowListCategory extends StatelessWidget {
                         .equalTo(auth.currentUser!.uid),
                 itemBuilder: (context, snapshot, animation, index) {
                   // ignore: unrelated_type_equality_checks
-                  return snapshot.child('type').value.toString() == type
-                      ? ItemCategory(
-                          expense: Expense(
-                              snapshot.child('money').value.toString(),
-                              snapshot.child('note').value.toString(),
-                              snapshot.child('timeChosse').value.toString(),
-                              snapshot.child('timeInput').value.toString(),
-                              snapshot.child('type').value.toString(),
-                              snapshot.child('uID').value.toString()),
-                          currentScreen: currentScreens,
-                          snapshot: snapshot,
-                        )
+                  return snapshot.child('type').value.toString() == type &&
+                          _getChosseTime(
+                              DateTime.parse(snapshot
+                                  .child('timeChosse')
+                                  .value
+                                  .toString()),
+                              timeChosse)
+                      ? type == listImcome[0]
+                          ? ItemCategory(
+                              expense: Expense(
+                                  snapshot.child('money').value.toString(),
+                                  snapshot.child('note').value.toString(),
+                                  snapshot.child('timeChosse').value.toString(),
+                                  snapshot.child('timeInput').value.toString(),
+                                  snapshot.child('type').value.toString(),
+                                  snapshot.child('uID').value.toString()),
+                              currentScreen: currentScreens,
+                              status:
+                                  snapshot.child('status').value.toString() ==
+                                      'true',
+                              snapshot: snapshot,
+                            )
+                          : ItemCategory(
+                              expense: Expense(
+                                  snapshot.child('money').value.toString(),
+                                  snapshot.child('note').value.toString(),
+                                  snapshot.child('timeChosse').value.toString(),
+                                  snapshot.child('timeInput').value.toString(),
+                                  snapshot.child('type').value.toString(),
+                                  snapshot.child('uID').value.toString()),
+                              currentScreen: currentScreens,
+                              status:
+                                  snapshot.child('status').value.toString() ==
+                                      'Ví',
+                              snapshot: snapshot,
+                            )
                       : Container();
                 },
               ),
@@ -121,7 +191,7 @@ class ShowListCategory extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 15.0, left: 5),
             child: IconButton(
-                onPressed: () => Get.back(),
+                onPressed: () => Get.back(result: {'a': '123'}),
                 icon: const Icon(
                   Icons.arrow_back_ios,
                   color: Colors.white,
