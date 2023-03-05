@@ -42,31 +42,57 @@ class _PieChartState extends State<PieChart> {
     super.initState();
     setState(() {
       final barGroup1 = makeGroupData(
-          0, widget.spending.t1 / (x / 20), widget.income.t1 / (x / 20));
+          0,
+          widget.spending.t1 / (x * 1000000 / 20),
+          widget.income.t1 / (x * 1000000 / 20));
       final barGroup2 = makeGroupData(
-          1, widget.spending.t2 / (x / 20), widget.income.t2 / (x / 20));
+          1,
+          widget.spending.t2 / (x * 1000000 / 20),
+          widget.income.t2 / (x * 1000000 / 20));
       final barGroup3 = makeGroupData(
-          2, widget.spending.t3 / (x / 20), widget.income.t3 / (x / 20));
+          2,
+          widget.spending.t3 / (x * 1000000 / 20),
+          widget.income.t3 / (x * 1000000 / 20));
       final barGroup4 = makeGroupData(
-          3, widget.spending.t4 / (x / 20), widget.income.t4 / (x / 20));
+          3,
+          widget.spending.t4 / (x * 1000000 / 20),
+          widget.income.t4 / (x * 1000000 / 20));
       final barGroup5 = makeGroupData(
-          4, widget.spending.t5 / (x / 20), widget.income.t5 / (x / 20));
+          4,
+          widget.spending.t5 / (x * 1000000 / 20),
+          widget.income.t5 / (x * 1000000 / 20));
       final barGroup6 = makeGroupData(
-          5, widget.spending.t6 / (x / 20), widget.income.t6 / (x / 20));
+          5,
+          widget.spending.t6 / (x * 1000000 / 20),
+          widget.income.t6 / (x * 1000000 / 20));
       final barGroup7 = makeGroupData(
-          6, widget.spending.t7 / (x / 20), widget.income.t7 / (x / 20));
+          6,
+          widget.spending.t7 / (x * 1000000 / 20),
+          widget.income.t7 / (x * 1000000 / 20));
       final barGroup8 = makeGroupData(
-          7, widget.spending.t8 / (x / 20), widget.income.t8 / (x / 20));
+          7,
+          widget.spending.t8 / (x * 1000000 / 20),
+          widget.income.t8 / (x * 1000000 / 20));
       final barGroup9 = makeGroupData(
-          8, widget.spending.t9 / (x / 20), widget.income.t9 / (x / 20));
+          8,
+          widget.spending.t9 / (x * 1000000 / 20),
+          widget.income.t9 / (x * 1000000 / 20));
       final barGroup10 = makeGroupData(
-          9, widget.spending.t10 / (x / 20), widget.income.t10 / (x / 20));
+          9,
+          widget.spending.t10 / (x * 1000000 / 20),
+          widget.income.t10 / (x * 1000000 / 20));
       final barGroup11 = makeGroupData(
-          10, widget.spending.t11 / (x / 20), widget.income.t11 / (x / 20));
+          10,
+          widget.spending.t11 / (x * 1000000 / 20),
+          widget.income.t11 / (x * 1000000 / 20));
       final barGroup12 = makeGroupData(
-          11, widget.spending.t12 / (x / 20), widget.income.t12 / (x / 20));
+          11,
+          widget.spending.t12 / (x * 1000000 / 20),
+          widget.income.t12 / (x * 1000000 / 20));
       final barGroup13 = makeGroupData(
-          12, widget.spending.t12 / (x / 20), widget.income.t12 / (x / 20));
+          12,
+          widget.spending.t12 / (x * 1000000 / 20),
+          widget.income.t12 / (x * 1000000 / 20));
 
       final items = [
         widget.spending.t1 == 0 && widget.income.t1 == 0
@@ -301,12 +327,12 @@ class _PieChartState extends State<PieChart> {
     if (value == 0) {
       text = '0đ';
     } else if (value == 4) {
-      text = '${double.parse(x.toString()).ceil() / 4000000}\nTr';
+      text = '${double.parse(x.toString()).ceil() / 4}\nTr';
     } else if (value == 10) {
-      text = '${double.parse(x.toString()).ceil() / 2000000}\nTr';
+      text = '${double.parse(x.toString()).ceil() / 2}\nTr';
     } else if (value == 20) {
       text =
-          '${double.parse(x.toString()).ceil() / 1000000}\n${widget.maxNum.toString().length > 9 ? 'T' : 'Tr'}';
+          '${double.parse(x.toString()).ceil() / 1}\n${widget.maxNum.toString().length > 9 ? 'T' : 'Tr'}';
     } else {
       return Container();
     }
