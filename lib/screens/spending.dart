@@ -35,6 +35,7 @@ class _SpendingState extends State<Spending> {
   CategorySpending categorySpending =
       CategorySpending(0, 0, 0, 0, 0, 0, 0, 0, 0);
   List<String> listCategory = [];
+  DateTime dateTime = DateTime.now();
   Set<String> listCategorypiechart = {};
   double totalAll = 0.0;
   dynamic total = 0;
@@ -202,7 +203,7 @@ class _SpendingState extends State<Spending> {
   }
 
   bool _getChosseTime(DateTime timeFirebase, String itemlistCt) {
-    var dateTimenow = DateTime.now();
+    var dateTimenow = dateTime;
     switch (itemlistCt) {
       case 'Ngày':
         {
@@ -264,39 +265,42 @@ class _SpendingState extends State<Spending> {
         ),
         Padding(
           padding: EdgeInsets.fromLTRB(
-              screensIndex.width / 3,
+              15,
               screensIndex.width / 2.5 + screensIndex.width / 1.7,
-              screensIndex.width / 3,
+              15,
               screensIndex.width / 1.37),
-          child: DropdownButtonFormField(
-            value: _listChosseTime,
-            items: listChosseTime.map((e) {
-              return DropdownMenuItem(
-                // ignore: sort_child_properties_last
-                child: Text(
-                  e,
-                  style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 15,
-                      color: Colors.black.withOpacity(0.6)),
-                ),
-                value: e,
-              );
-            }).toList(),
-            onChanged: ((value) {
-              setState(() {
-                _listChosseTime = value as String;
-                _getTotalCategory();
-              });
-            }),
-            icon: Icon(
-              Icons.arrow_drop_down_circle,
-              color: Colors.indigo[400],
+          child: SizedBox(
+            width: screensIndex.width / 3,
+            child: DropdownButtonFormField(
+              value: _listChosseTime,
+              items: listChosseTime.map((e) {
+                return DropdownMenuItem(
+                  // ignore: sort_child_properties_last
+                  child: Text(
+                    e,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 15,
+                        color: Colors.black.withOpacity(0.6)),
+                  ),
+                  value: e,
+                );
+              }).toList(),
+              onChanged: ((value) {
+                setState(() {
+                  _listChosseTime = value as String;
+                  _getTotalCategory();
+                });
+              }),
+              icon: Icon(
+                Icons.arrow_drop_down_circle,
+                color: Colors.indigo[400],
+              ),
+              decoration: InputDecoration(
+                  labelText: 'Chọn thời gian',
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15))),
             ),
-            decoration: InputDecoration(
-                labelText: 'Chọn thời gian',
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15))),
           ),
         ),
         Padding(
